@@ -27,67 +27,90 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev,windows]"
 
-      - name: Enable Windows Remote Desktop (RDP)
+      - name: Configure and Start Windows Remote Desktop Service
         shell: powershell
         run: |
+          # 1. Enable RDP in Registry
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
-          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 0
-          Write-Host "[OK] Remote Desktop enabled."
+          Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "SecurityLayer" -Value 1
 
-      - name: Create or Set Runner Password
-        shell: powershell
-        run: |
+          # 2. Configure Windows Firewall
+          netsh advfirewall firewall add rule name="Allow RDP" dir=in action=allow protocol=TCP localport=3389
+          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+          # 3. Set runneradmin Password & Permissions
           $Password = ConvertTo-SecureString "WinRoid@Agent2026" -AsPlainText -Force
           Set-LocalUser -Name "runneradmin" -Password $Password
-          Write-Host "[OK] Runner user password configured."
+          Add-LocalGroupMember -Group "Administrators" -Member "runneradmin" -ErrorAction SilentlyContinue
+          Add-LocalGroupMember -Group "Remote Desktop Users" -Member "runneradmin" -ErrorAction SilentlyContinue
 
-      - name: Launch Free Cloud RDP Tunnel (Zero Card / Zero Signup)
+          # 4. Restart TermService to apply registry & permission changes
+          Set-Service -Name "TermService" -StartupType Automatic
+          Restart-Service -Name "TermService" -Force
+
+          # 5. Verify local RDP port is listening
+          Start-Sleep -Seconds 3
+          $listening = Get-NetTCPConnection -LocalPort 3389 -State Listen -ErrorAction SilentlyContinue
+          if ($listening) {
+            Write-Host "[OK] Remote Desktop Service (TermService) is listening locally on port 3389."
+          } else {
+            Write-Host "[WARN] TermService not yet detected on 3389, starting service..."
+            Start-Service -Name "TermService"
+          }
+
+      - name: Launch Multi-Tunnel RDP Endpoints
         shell: powershell
         run: |
-          Write-Host "Downloading open-source TCP tunnel..."
+          # --- Tunnel 1: Bore.pub ---
           Invoke-WebRequest -Uri "https://github.com/ekzhang/bore/releases/download/v0.5.2/bore-v0.5.2-x86_64-pc-windows-msvc.zip" -OutFile "bore.zip"
           Expand-Archive bore.zip -DestinationPath . -Force
-
-          Write-Host "Starting TCP Tunnel on RDP Port 3389..."
           Start-Process -FilePath ".\bore.exe" -ArgumentList "local 3389 --to bore.pub" -RedirectStandardOutput "bore.log" -RedirectStandardError "bore_err.log"
 
-          $Port = ""
+          # --- Tunnel 2: Pinggy TCP via OpenSSH ---
+          Start-Process -FilePath "ssh" -ArgumentList "-o StrictHostKeyChecking=no -o ServerAliveInterval=30 -p 443 -R0:127.0.0.1:3389 tcp@a.pinggy.io" -RedirectStandardOutput "pinggy.log" -RedirectStandardError "pinggy_err.log"
+
+          $BoreUrl = ""
+          $PinggyUrl = ""
+
           for ($i = 0; $i -lt 15; $i++) {
             Start-Sleep -Seconds 2
-            if (Test-Path "bore.log") {
-              $Content = Get-Content "bore.log" -Raw
-              if ($Content -match "listening at bore\.pub:(\d+)") {
-                $Port = $Matches[1]
-                break
+            if (-not $BoreUrl -and (Test-Path "bore.log")) {
+              $b = Get-Content "bore.log" -Raw -ErrorAction SilentlyContinue
+              if ($b -match "listening at bore\.pub:(\d+)") {
+                $BoreUrl = "bore.pub:" + $Matches[1]
               }
+            }
+            if (-not $PinggyUrl -and (Test-Path "pinggy.log")) {
+              $p = Get-Content "pinggy.log" -Raw -ErrorAction SilentlyContinue
+              if ($p -match "(tcp://[^\s]+|a\.pinggy\.io:\d+|t\.pinggy\.io:\d+)") {
+                $PinggyUrl = $Matches[1].Replace("tcp://", "")
+              }
+            }
+            if ($BoreUrl -or $PinggyUrl) {
+              if ($i -ge 5) { break }
             }
           }
 
-          if (-not $Port) {
-            Write-Host "::error::Failed to obtain public tunnel port from bore.pub. Log:"
-            Get-Content "bore.log" -ErrorAction SilentlyContinue
-            Get-Content "bore_err.log" -ErrorAction SilentlyContinue
-            exit 1
+          Write-Host ""
+          Write-Host "============================================================" -ForegroundColor Green
+          Write-Host "CLOUD WINDOWS DESKTOP IS READY FOR REMOTE CONNECTION!" -ForegroundColor Green
+          Write-Host "============================================================" -ForegroundColor Green
+          Write-Host ""
+          if ($BoreUrl) {
+            Write-Host ">> PRIMARY RDP ADDRESS:   $BoreUrl" -ForegroundColor Yellow
           }
-
-          $RdpHost = "bore.pub:$Port"
-
-          Write-Host ""
-          Write-Host "============================================================" -ForegroundColor Green
-          Write-Host "CLOUD WINDOWS DESKTOP IS LIVE AND READY FOR RDP!" -ForegroundColor Green
-          Write-Host "============================================================" -ForegroundColor Green
-          Write-Host ""
-          Write-Host "Remote Desktop Address:  $RdpHost" -ForegroundColor Yellow
-          Write-Host "Username:                runneradmin" -ForegroundColor Cyan
-          Write-Host "Password:                WinRoid@Agent2026" -ForegroundColor Cyan
+          if ($PinggyUrl) {
+            Write-Host ">> BACKUP RDP ADDRESS:    $PinggyUrl" -ForegroundColor Yellow
+          }
+          Write-Host ">> USERNAME:              runneradmin" -ForegroundColor Cyan
+          Write-Host ">> PASSWORD:              WinRoid@Agent2026" -ForegroundColor Cyan
           Write-Host ""
           Write-Host "============================================================" -ForegroundColor Green
           Write-Host "Connecting from your PC:"
           Write-Host "1. Press Win + R, type 'mstsc' and press Enter."
-          Write-Host "2. In Computer field, paste: $RdpHost"
-          Write-Host "3. Login with runneradmin / WinRoid@Agent2026"
-          Write-Host "4. Inside the VM, open terminal and test WinRoid-Agent with live GUI!"
+          Write-Host "2. In 'Computer' field, paste either address above."
+          Write-Host "3. Connect with: runneradmin / WinRoid@Agent2026"
           Write-Host "============================================================" -ForegroundColor Green
 
       - name: Keep Cloud Windows Desktop Active

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "💬 Community Discussions & Q&A"
+    url: "https://github.com/android-gemini-agent/android-gemini-agent/discussions"
+    about: "Ask questions, share automation recipes, and discuss agent workflows with the community."
+  - name: "📖 Showcase Documentation & Architecture"
+    url: "https://github.com/android-gemini-agent/android-gemini-agent#readme"
+    about: "Read setup guides, wireless pairing walkthroughs, and REPL cheat sheets."

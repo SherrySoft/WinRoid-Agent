@@ -1,0 +1,96 @@
+name: "🐛 Bug Report"
+description: "Report a bug or unexpected behavior in Android & Windows Gemini Agent"
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report an issue! Please fill out the form below to help us reproduce, diagnose, and resolve it quickly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Bug Description"
+      description: "A clear and concise description of what the bug is."
+      placeholder: "Describe what went wrong..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Steps to Reproduce"
+      description: "Step-by-step instructions to reproduce the behavior."
+      placeholder: |
+        1. Run `python -m android_gemini_agent.cli.app --connect 192.168.1.50:5555`
+        2. Execute task: `Open Settings`
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected Behavior"
+      description: "What you expected to happen."
+      placeholder: "Describe the expected outcome..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: "Target Platform"
+      description: "Which automation platform were you running against?"
+      options:
+        - "Android Wireless ADB (Real Device)"
+        - "Android USB ADB (Real Device)"
+        - "Android Mock Simulation (MockAdbClient)"
+        - "Windows Desktop Automation (Live OS)"
+        - "Windows Desktop Automation (Mock)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: gemini_model
+    attributes:
+      label: "Gemini Model Used"
+      description: "Which model was active during the run?"
+      options:
+        - "gemini-2.5-flash (Default)"
+        - "gemini-3.5-flash-lite"
+        - "gemini-3.1-flash-lite"
+        - "gemini-2.5-flash-lite"
+        - "gemini-2.5-pro"
+        - "Mock Gemini Engine"
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: "Environment Details"
+      description: "OS version, Python version, Android version (e.g., Windows 11 / Ubuntu 24.04, Python 3.12, Android 14)."
+      placeholder: "e.g., Windows 11 23H2, Python 3.12.2, Pixel 7 Android 14"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs & Terminal Output"
+      description: "Paste relevant command line output, Rich tracebacks, or ADB logs (redact any sensitive API keys!)."
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: "Pre-submission Checklist"
+      options:
+        - label: "I have searched existing issues to ensure this is not a duplicate."
+          required: true
+        - label: "I have verified that no private API keys or personal data are included in the logs."
+          required: true
+        - label: "I have tested or reproduced this with the latest `main` branch."
+          required: false

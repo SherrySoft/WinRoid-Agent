@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<hierarchy rotation="1">
+  <node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[0,0][1080,2400]">
+    <!-- Edge 1: Zero-size / invisible nodes -->
+    <node index="0" text="Invisible text" resource-id="com.example.edge:id/zero_size" class="android.widget.TextView" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[0,0][0,0]" />
+    <node index="1" text="Zero width node" resource-id="com.example.edge:id/zero_width" class="android.widget.Button" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[200,300][200,400]" />
+    
+    <!-- Edge 2: Negative coordinates / offscreen bounds -->
+    <node index="2" text="Offscreen cached view left" resource-id="com.example.edge:id/offscreen_left" class="android.widget.TextView" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[-500,100][-100,200]" />
+    <node index="3" text="Offscreen top" resource-id="com.example.edge:id/offscreen_top" class="android.widget.TextView" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[100,-400][500,-100]" />
+    
+    <!-- Edge 3: Beyond screen width & height bounds -->
+    <node index="4" text="Beyond screen bottom" resource-id="com.example.edge:id/beyond_bottom" class="android.widget.TextView" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[0,2500][1080,2700]" />
+    <node index="5" text="Beyond screen right" resource-id="com.example.edge:id/beyond_right" class="android.widget.TextView" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[1200,300][1500,400]" />
+    
+    <!-- Edge 4: Special characters, XML entities, multi-line & emoji -->
+    <node index="6" text="Sale: 50% &amp; free shipping! 🚀 (Save &lt;$20&gt; &#10;Limited time)" resource-id="com.example.edge:id/special_text" class="android.widget.TextView" package="com.example.edge" content-desc="Special deal" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[50,100][1030,300]" />
+    
+    <!-- Edge 5: RTL text (Arabic) -->
+    <node index="7" text="مرحبا بكم في التطبيق" resource-id="com.example.edge:id/arabic_text" class="android.widget.TextView" package="com.example.edge" content-desc="ترحيب" checkable="false" checked="false" clickable="true" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[100,350][980,450]" />
+    
+    <!-- Edge 6: Whitespace-only text (non-actionable, should be pruned) -->
+    <node index="8" text="   &#09;   &#10;  " resource-id="com.example.edge:id/whitespace_text" class="android.widget.TextView" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[100,500][500,550]" />
+    
+    <!-- Edge 7: Clickable card container with non-clickable child -->
+    <node index="9" text="" resource-id="com.example.edge:id/card_view" class="androidx.cardview.widget.CardView" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[50,600][1030,800]">
+      <node index="0" text="Card Title" resource-id="com.example.edge:id/card_title" class="android.widget.TextView" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[80,630][600,700]" />
+      <node index="1" text="Card Description details..." resource-id="com.example.edge:id/card_desc" class="android.widget.TextView" package="com.example.edge" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[80,710][800,770]" />
+    </node>
+  </node>
+</hierarchy>

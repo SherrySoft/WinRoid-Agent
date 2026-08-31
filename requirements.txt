@@ -1,0 +1,15 @@
+# Gemini GenAI SDK
+google-genai>=2.0.0
+
+# Terminal UI & Rich Formatting
+rich>=13.7.0
+
+# Environment Management
+python-dotenv>=1.0.0
+
+# Data Validation & Models
+pydantic>=2.0.0
+
+# Testing & Mock Suite
+pytest>=8.0.0
+pytest-mock>=3.12.0

@@ -1,0 +1,57 @@
+name: "🚀 Feature Request"
+description: "Suggest an idea or enhancement for Android & Windows Gemini Agent"
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We welcome proposals, feature requests, and new automation capabilities! Please describe the use case and desired API or behavior below.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Problem or Use Case Summary"
+      description: "What problem are you trying to solve, or what workflow would this feature enable?"
+      placeholder: "I would like the agent to support..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution / Implementation Idea"
+      description: "Describe how you envision the feature working, including CLI flags, Python SDK APIs, or architectural changes."
+      placeholder: "Add a new tool declaration in tools.py that..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: subsystem
+    attributes:
+      label: "Subsystem Area"
+      description: "Which part of the repository would this feature affect?"
+      options:
+        - "Android ADB Client & Controller (Gestures, Pairing, Connection)"
+        - "Windows Desktop Automation (COM UIAutomation, PyAutoGUI)"
+        - "Gemini Decision Engine & Tools (Tool schemas, Loop detection, Quota)"
+        - "UI Hierarchy Parser & AST Compactor (Token formatting, XML pruning)"
+        - "Rich CLI REPL & Visual Terminal (Interactive commands, themes)"
+        - "Developer Examples & Documentation"
+        - "CI/CD & Testing Infrastructure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives Considered"
+      description: "Any alternative solutions, workarounds, or complementary libraries you have explored."
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: "Contribution"
+      options:
+        - label: "I am willing to submit a Pull Request to implement this feature."
+          required: false

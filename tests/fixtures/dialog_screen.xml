@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<hierarchy rotation="0">
+  <node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="com.example.app" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[0,0][1080,2400]">
+    <!-- Dimmed background scrim -->
+    <node index="0" text="" resource-id="android:id/content" class="android.widget.FrameLayout" package="com.example.app" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[0,0][1080,2400]">
+      <!-- Dialog Panel -->
+      <node index="0" text="" resource-id="com.example.app:id/dialog_root" class="android.widget.LinearLayout" package="com.example.app" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[120,800][960,1600]">
+        <node index="0" text="Allow Wireless Debugging?" resource-id="com.example.app:id/alertTitle" class="android.widget.TextView" package="com.example.app" content-desc="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[180,860][900,940]" />
+        <node index="1" text="Always allow on this network (Wi-Fi: Home_5G)" resource-id="com.example.app:id/checkbox_always" class="android.widget.CheckBox" package="com.example.app" content-desc="" checkable="true" checked="true" clickable="true" enabled="true" focusable="true" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[180,970][900,1050]" />
+        <node index="2" text="Cancel" resource-id="android:id/button2" class="android.widget.Button" package="com.example.app" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[450,1480][660,1560]" />
+        <node index="3" text="Allow" resource-id="android:id/button1" class="android.widget.Button" package="com.example.app" content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="true" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[700,1480][910,1560]" />
+      </node>
+    </node>
+  </node>
+</hierarchy>

@@ -1,4 +1,4 @@
-name: 🖥️ Cloud Windows RDP Desktop
+name: Cloud Windows RDP Desktop
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install WinRoid-Agent & Dependencies
+      - name: Install WinRoid-Agent and Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev,windows]"
@@ -33,13 +33,14 @@ jobs:
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 0
+          Write-Host "[OK] Remote Desktop enabled."
 
-      - name: Create / Set Runner Password
+      - name: Create or Set Runner Password
         shell: powershell
         run: |
           $Password = ConvertTo-SecureString "WinRoid@Agent2026" -AsPlainText -Force
           Set-LocalUser -Name "runneradmin" -Password $Password
-          Write-Host "✓ Runner user password set successfully."
+          Write-Host "[OK] Runner user password configured."
 
       - name: Download and Launch Ngrok RDP Tunnel
         shell: powershell
@@ -67,17 +68,17 @@ jobs:
 
           Write-Host ""
           Write-Host "============================================================" -ForegroundColor Green
-          Write-Host "🎉 CLOUD WINDOWS DESKTOP IS LIVE & READY FOR RDP!" -ForegroundColor Green
+          Write-Host "CLOUD WINDOWS DESKTOP IS LIVE AND READY FOR RDP!" -ForegroundColor Green
           Write-Host "============================================================" -ForegroundColor Green
           Write-Host ""
-          Write-Host "👉 Remote Desktop Address:  $RdpUrl" -ForegroundColor Yellow
-          Write-Host "👉 Username:                runneradmin" -ForegroundColor Cyan
-          Write-Host "👉 Password:                WinRoid@Agent2026" -ForegroundColor Cyan
+          Write-Host "Remote Desktop Address:  $RdpUrl" -ForegroundColor Yellow
+          Write-Host "Username:                runneradmin" -ForegroundColor Cyan
+          Write-Host "Password:                WinRoid@Agent2026" -ForegroundColor Cyan
           Write-Host ""
           Write-Host "============================================================" -ForegroundColor Green
           Write-Host "Connecting from your PC:"
           Write-Host "1. Press Win + R, type 'mstsc' and press Enter."
-          Write-Host "2. In 'Computer', paste: $RdpUrl"
+          Write-Host "2. In Computer, paste: $RdpUrl"
           Write-Host "3. Login with runneradmin / WinRoid@Agent2026"
           Write-Host "4. Inside the VM, open terminal and test WinRoid-Agent with live GUI!"
           Write-Host "============================================================" -ForegroundColor Green
